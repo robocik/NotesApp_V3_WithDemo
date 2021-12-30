@@ -60,7 +60,15 @@ namespace NoteBookApp.Client.Pages.Files
             try
             {
                 var url = await FileDataService.GetFileDirectUrl(fileId);
-                await JSRuntime.InvokeVoidAsync("DownloadFile", url);
+                if (url == NoteBookApp.Shared.Constants.Demo)
+                {
+                    ShowError("W wersji Demo wysyłanie plików jest wyłączone. Jednak standardowo w tym momencie Twój plik zostałby ściągnięty");
+                }
+                else
+                {
+                    await JSRuntime.InvokeVoidAsync("DownloadFile", url);
+                }
+                
             }
             catch (ObjectNotFoundException ex)
             {

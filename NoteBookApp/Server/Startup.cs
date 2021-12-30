@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using MediatR;
@@ -53,7 +54,16 @@ namespace NoteBookApp.Server
             services.AddScoped(typeof(IUserStore<ApplicationUser>), typeof(UsersService));
             ConfigureNHibernate(services, settings);
 
-            services.AddSingleton<IFileSystemProvider>(x => new AzureBlobStorageProvider(Configuration.GetValue<string>("AzureBlob")));
+            if (settings.IsDemo)
+            {
+                services.AddSingleton<IFileSystemProvider, LiveDemoFileSystemProvider>();
+                
+            }
+            else
+            {
+                services.AddSingleton<IFileSystemProvider>(x => new AzureBlobStorageProvider(Configuration.GetValue<string>("AzureBlob")));
+            }
+            
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
@@ -120,8 +130,19 @@ namespace NoteBookApp.Server
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var settings = Configuration
-                .GetSection("Settings")
+                .GetSection("AppSettings")
                 .Get<AppSettings>();
+            if (settings?.IsDemo == true)
+            {
+                var tempFolder = new DirectoryInfo("wwwroot\\Temp");
+                if (tempFolder.Exists)
+                {
+                    tempFolder.Delete(true);
+                }
+                tempFolder.Create();
+                app.UseSession();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -133,10 +154,7 @@ namespace NoteBookApp.Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            if (settings?.IsDemo == true)
-            {
-                app.UseSession();
-            }
+            
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             app.ConfigureExceptionHandler(env);
             app.UseHttpsRedirection();

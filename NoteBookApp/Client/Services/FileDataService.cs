@@ -28,6 +28,10 @@ namespace NoteBookApp.Client.Services
                 }
                 result.EnsureSuccessStatusCode();
                 var fileAccessToken = await result.Content.ReadAsAsync<FileAccessToken>().ConfigureAwait(false);
+                if (fileAccessToken.Token == NoteBookApp.Shared.Constants.Demo)
+                {
+                    return fileAccessToken.FileId;
+                }
                 try
                 {
                     var progress = new Progress<long>((progress) =>

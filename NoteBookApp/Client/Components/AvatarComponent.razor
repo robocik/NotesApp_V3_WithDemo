@@ -1,4 +1,5 @@
-﻿@inherits NoteBookApp.Client.Pages.BoxBase
+﻿@using Constants = NoteBookApp.Shared.Constants
+@inherits NoteBookApp.Client.Pages.BoxBase
 
 
     <label>
@@ -13,7 +14,15 @@
 
         @if (AvatarUrl != null)
         {
-            <img src="@AvatarUrl" class="@ImageClass img-thumbnail shadow-sm avatar-edit" title="Kliknij, aby zmienić"/>
+            @if (AvatarUrl == Constants.Demo)
+            {
+                <span>W trybie demo nie można zmienić obrazka</span>
+            }
+            else
+            {
+                <img src="@AvatarUrl" class="@ImageClass img-thumbnail shadow-sm avatar-edit" title="Kliknij, aby zmienić"/>    
+            }
+            
         }
         else
         {

@@ -39,6 +39,7 @@ public class DemoDataCreator
         file.CreatedDateTime = _dateTime.UtcNow.AddDays(-30);
         file.FileName = "opis.txt";
         file.Length = 1000;
+        file.CreatedBy = applicationUser;
         file.ObjectId = note.Id;
         _nhSession.Save(file);
 
@@ -55,6 +56,7 @@ public class DemoDataCreator
         file2.CreatedDateTime = _dateTime.UtcNow.AddDays(-10);
         file2.FileName = "opis.txt";
         file2.Length = 1000;
+        file2.CreatedBy = applicationUser;
         file2.ObjectId = note.Id;
         _nhSession.Save(file2);
 

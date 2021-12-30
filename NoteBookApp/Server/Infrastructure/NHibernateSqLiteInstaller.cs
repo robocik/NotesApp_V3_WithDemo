@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate;
+using NHibernate.AspNetCore.Identity;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
@@ -72,6 +73,12 @@ public static class NHibernateSqLiteInstaller
             db.LogFormattedSql = true;
             db.ConnectionString = @"Data Source='wwwroot\Temp\TestDb.db';Version=3;New=True;Compress=True;";
         });
+
+        services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddDefaultTokenProviders()
+            .AddHibernateStores();
+        cfg.Cache(c => c.UseQueryCache = false);
+
         var mapping = new ModelMapper();
         mapping.AddMappings(typeof(ApplicationUserMapping).Assembly.GetTypes());
         mapping.AddMapping(typeof(NHibernate.AspNetCore.Identity.Mappings.IdentityUserMappingSqlite));
@@ -97,7 +104,7 @@ public static class NHibernateSqLiteInstaller
     private static ISession CreateNhSession(IServiceProvider provider, Configuration cfg)
     {
         var httpContextAccessor = provider.GetService<IHttpContextAccessor>();
-        var tempId = httpContextAccessor!.HttpContext!.Session.GetString("CompanyId");
+        var tempId = httpContextAccessor!.HttpContext!.Session.GetString("TenantId");
         Guid tenantId = Guid.Empty;
         if (tempId != null)
         {

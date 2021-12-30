@@ -1,4 +1,11 @@
-# Jak uruchomić projekt?
+Dokładny opis znajdziesz na moim blogu:
+https://soloprogramista.pl/
+
+# Jak uruchomić projekt w trybie Live Demo
+1. Otwórz plik appsettings.json w projekcie i ustaw IsDemo=true
+2. Uruchom projekt **NoteBookApp.Server**
+
+# Jak uruchomić projekt w trybie produkcyjnym?
 ### Utworzenie Azure Blob Storage 
 1. Zaloguj się do Azure Portal
 2. Przejdź do Storage accounts i utwórz nowy storage.

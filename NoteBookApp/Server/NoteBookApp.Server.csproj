@@ -26,6 +26,7 @@
 		<PackageReference Include="NHibernate.AspNetCore.Identity" Version="6.0.1" />
 		<PackageReference Include="NHibernate.NetCore" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.0" />
+		<PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" />
 		<PackageReference Include="AutoMapper" Version="10.1.1" />
 		<PackageReference Include="MediatR" Version="9.0.0" />
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
@@ -41,6 +42,10 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\Temp\" />
 	</ItemGroup>
 
 </Project>

@@ -14,7 +14,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NoteBookApp.Logic.Domain;
+using NoteBookApp.Server.Infrastructure;
 
 namespace NoteBookApp.Server.Areas.Identity.Pages.Account
 {
@@ -22,11 +24,13 @@ namespace NoteBookApp.Server.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IOptions<AppSettings> _settings;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, IOptions<AppSettings> settings)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _settings = settings;
         }
 
         /// <summary>
@@ -55,6 +59,8 @@ namespace NoteBookApp.Server.Areas.Identity.Pages.Account
         [TempData]
         public string ErrorMessage { get; set; }
 
+        public bool IsDemo { get; set; }
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -75,13 +81,14 @@ namespace NoteBookApp.Server.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [DataType(DataType.Password)]
+            [Display(Name = "Hasło")]
             public string Password { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Zapamiętaj mnie?")]
             public bool RememberMe { get; set; }
         }
 
@@ -91,7 +98,13 @@ namespace NoteBookApp.Server.Areas.Identity.Pages.Account
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
-
+            IsDemo = _settings.Value.IsDemo;
+            if (IsDemo)
+            {
+                Input = new InputModel();
+                Input.Email = "test@noteapp.pl";
+                Input.Password = "test";
+            }
             returnUrl ??= Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
