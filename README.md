@@ -1,5 +1,5 @@
 Dokładny opis znajdziesz na moim blogu:
-https://soloprogramista.pl/
+https://soloprogramista.pl/2022/01/03/trybu-live-demo-do-aplikacji-asp-net-core-i-blazor/
 
 # Jak uruchomić projekt w trybie Live Demo
 1. Otwórz plik appsettings.json w projekcie i ustaw IsDemo=true
